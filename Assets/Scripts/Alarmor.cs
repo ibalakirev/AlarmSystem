@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
+
 public class Alarmor : MonoBehaviour
 {
     private AudioSource _audioAlarmSystem;
@@ -16,31 +18,32 @@ public class Alarmor : MonoBehaviour
 
     public void EnableAlarm()
     {
-        if (_coroutineActive != null)
-        {
-            StopCoroutine(_coroutineActive);
-        }
-
-        _coroutineActive = StartCoroutine(FadeInVolumeAlarm());
+        ManageStateAlarm(FadeInVolumeAlarm());
     }
 
     public void DisableAlarm()
     {
+        ManageStateAlarm(FadeOutVolumeAlarm());
+    }
+
+    private void ManageStateAlarm(IEnumerator changingVolumeAlarm)
+    {
         if (_coroutineActive != null)
         {
             StopCoroutine(_coroutineActive);
         }
 
-        _coroutineActive = StartCoroutine(FadeOutVolumeAlarm());
+        _coroutineActive = StartCoroutine(changingVolumeAlarm);
     }
 
     private IEnumerator FadeInVolumeAlarm()
     {
-        PlayAudioAlarmSystem();
+        _audioAlarmSystem.Play();
+
 
         _audioAlarmSystem.volume = _minVolumeAlarmSystem;
 
-        while (_audioAlarmSystem.volume < _maxVolumeAlarmSystem)
+        while (GetConditionChangingVolumeAlarm(_maxVolumeAlarmSystem, _audioAlarmSystem.volume))
         {
             ChangeVolumeAlarm(_audioAlarmSystem.volume, _maxVolumeAlarmSystem, _speed);
 
@@ -50,9 +53,7 @@ public class Alarmor : MonoBehaviour
 
     private IEnumerator FadeOutVolumeAlarm()
     {
-        PlayAudioAlarmSystem();
-
-        while (_audioAlarmSystem.volume > _minVolumeAlarmSystem)
+        while (GetConditionChangingVolumeAlarm(_audioAlarmSystem.volume, _minVolumeAlarmSystem))
         {
             ChangeVolumeAlarm(_audioAlarmSystem.volume, _minVolumeAlarmSystem, _speed);
 
@@ -62,13 +63,13 @@ public class Alarmor : MonoBehaviour
         _audioAlarmSystem.Stop();
     }
 
+    private bool GetConditionChangingVolumeAlarm(float InitialVolumeAlarm, float finalVolumeAlarm)
+    {
+        return InitialVolumeAlarm > finalVolumeAlarm;
+    }
+
     private void ChangeVolumeAlarm(float initialVolume, float finalVolume, float speed)
     {
         _audioAlarmSystem.volume = Mathf.MoveTowards(initialVolume, finalVolume, speed * Time.deltaTime);
-    }
-
-    private void PlayAudioAlarmSystem()
-    {
-        _audioAlarmSystem.Play();
     }
 }

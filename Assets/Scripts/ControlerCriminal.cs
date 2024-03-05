@@ -1,6 +1,8 @@
 using UnityEngine;
 
-public class CriminalController : MonoBehaviour
+[RequireComponent(typeof(Rigidbody2D))]
+
+public class ControlerCriminal : MonoBehaviour
 {
     private const string Horizontal = nameof(Horizontal);
     private const string Ground = nameof(Ground);
@@ -8,7 +10,7 @@ public class CriminalController : MonoBehaviour
 
     [SerializeField] private float _speedWalk;
     [SerializeField] private float _speedJump;
-    [SerializeField] private Animator _animator;
+    [SerializeField] private Animator _animator; 
 
     private float _horizontal = 0f;
     private bool _isFaicingRight = true;
