@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Alarmor : MonoBehaviour
 {
+    private Sensor _sensor;
     private AudioSource _audioAlarmSystem;
     private Coroutine _coroutineActive;
     private float _minVolumeAlarmSystem = 0f;
@@ -14,16 +15,28 @@ public class Alarmor : MonoBehaviour
     private void Awake()
     {
         _audioAlarmSystem = GetComponent<AudioSource>();
+        _sensor = FindObjectOfType<Sensor>();
     }
 
+    private void OnEnable()
+    {
+        _sensor.DetectionCriminalEnable += EnableAlarm;
+        _sensor.DetectionCriminalDisable += DisableAlarm;
+    }
+
+    private void OnDisble()
+    {
+        _sensor.DetectionCriminalEnable -= EnableAlarm;
+        _sensor.DetectionCriminalDisable -= DisableAlarm;
+    }
     public void EnableAlarm()
     {
-        ManageStateAlarm(FadeInVolumeAlarm());
+        ManageStateAlarm(ChangeVolumeAlarm(_maxVolumeAlarmSystem));
     }
 
     public void DisableAlarm()
     {
-        ManageStateAlarm(FadeOutVolumeAlarm());
+        ManageStateAlarm(ChangeVolumeAlarm(_minVolumeAlarmSystem));
     }
 
     private void ManageStateAlarm(IEnumerator changingVolumeAlarm)
@@ -36,40 +49,20 @@ public class Alarmor : MonoBehaviour
         _coroutineActive = StartCoroutine(changingVolumeAlarm);
     }
 
-    private IEnumerator FadeInVolumeAlarm()
+    private IEnumerator ChangeVolumeAlarm(float finalVolumeAlarm)
     {
         _audioAlarmSystem.Play();
 
-
-        _audioAlarmSystem.volume = _minVolumeAlarmSystem;
-
-        while (GetConditionChangingVolumeAlarm(_maxVolumeAlarmSystem, _audioAlarmSystem.volume))
+        while (_audioAlarmSystem.volume != finalVolumeAlarm)
         {
-            ChangeVolumeAlarm(_audioAlarmSystem.volume, _maxVolumeAlarmSystem, _speed);
-
-            yield return null;
-        }
-    }
-
-    private IEnumerator FadeOutVolumeAlarm()
-    {
-        while (GetConditionChangingVolumeAlarm(_audioAlarmSystem.volume, _minVolumeAlarmSystem))
-        {
-            ChangeVolumeAlarm(_audioAlarmSystem.volume, _minVolumeAlarmSystem, _speed);
+            _audioAlarmSystem.volume = Mathf.MoveTowards(_audioAlarmSystem.volume, finalVolumeAlarm, _speed * Time.deltaTime);
 
             yield return null;
         }
 
-        _audioAlarmSystem.Stop();
-    }
-
-    private bool GetConditionChangingVolumeAlarm(float InitialVolumeAlarm, float finalVolumeAlarm)
-    {
-        return InitialVolumeAlarm > finalVolumeAlarm;
-    }
-
-    private void ChangeVolumeAlarm(float initialVolume, float finalVolume, float speed)
-    {
-        _audioAlarmSystem.volume = Mathf.MoveTowards(initialVolume, finalVolume, speed * Time.deltaTime);
+        if (_audioAlarmSystem.volume == _minVolumeAlarmSystem)
+        {
+            _audioAlarmSystem.Stop();
+        }
     }
 }

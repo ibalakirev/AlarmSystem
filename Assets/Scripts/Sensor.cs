@@ -1,19 +1,16 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Sensor : MonoBehaviour
 {
-    private const string Criminal = nameof(Criminal);
-
-    [SerializeField] private UnityEvent _detectionCriminalEnable;
-    [SerializeField] private UnityEvent _detectionCriminalDisable;
-    [SerializeField] private ControlerCriminal _criminal;
+    public event Action DetectionCriminalEnable;
+    public event Action DetectionCriminalDisable;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (VerifyComponentCollider(other))
         {
-            _detectionCriminalEnable.Invoke();
+            DetectionCriminalEnable.Invoke();
         }
     }
 
@@ -21,7 +18,7 @@ public class Sensor : MonoBehaviour
     {
         if (VerifyComponentCollider(other))
         {
-            _detectionCriminalDisable.Invoke();
+            DetectionCriminalDisable.Invoke();
         }
     }
 

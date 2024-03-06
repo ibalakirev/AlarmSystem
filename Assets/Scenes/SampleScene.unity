@@ -385,37 +385,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fba104dd95f4f4742adcd835c61e4a82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _detectionCriminalEnable:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1997457306}
-        m_TargetAssemblyTypeName: Alarmor, Assembly-CSharp
-        m_MethodName: EnableAlarm
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _detectionCriminalDisable:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1997457306}
-        m_TargetAssemblyTypeName: Alarmor, Assembly-CSharp
-        m_MethodName: DisableAlarm
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _criminal: {fileID: 616934938}
 --- !u!212 &270925265
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -786,7 +755,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speedWalk: 100
-  _speedJump: 100
   _animator: {fileID: 1032718678}
 --- !u!1 &705507993
 GameObject:
@@ -7311,6 +7279,7 @@ GameObject:
   - component: {fileID: 1997457302}
   - component: {fileID: 1997457305}
   - component: {fileID: 1997457306}
+  - component: {fileID: 1997457307}
   m_Layer: 0
   m_Name: Alarm
   m_TagString: Untagged
@@ -7491,6 +7460,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb3d8e5f0d4cdea4994840ccce9bf99f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sensor: {fileID: 270925264}
+--- !u!114 &1997457307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997457301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fba104dd95f4f4742adcd835c61e4a82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &2059216264
